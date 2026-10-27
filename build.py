@@ -7,13 +7,13 @@
 import json, math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "9"  # bump to bust browser caches after CSS/JS changes
+V = "10"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
          '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300..700&display=swap">')
 
-NAV = [("about.html", "About", "about"), ("solutions.html", "Solutions", "solutions"),
+NAV = [("about.html", "About", "about"), ("solutions.html", "Solutions", "solutions"), ("work.html", "Work", "work"),
        ("insights.html", "Insights", "insights"), ("contact.html", "Contact", "contact")]
 
 EMAIL = "amit@houseoflions.in"
@@ -96,7 +96,7 @@ def closing():
       <p>Call for a free consultation</p>
       <p class="phone">{CONSULT}</p>
       <div class="dl-row"><a class="btn" href="contact.html">Contact us <span class="arr" aria-hidden="true">&#8599;</span></a><a class="link-arrow" href="{PORTFOLIO}" target="_blank" rel="noopener">Download portfolio <span class="arr" aria-hidden="true">&#8599;</span></a></div>
-      <div class="mane-panel"><canvas aria-hidden="true"></canvas><p class="mane-caption"><span>Move to wake the lion. Tap to roar.</span></p></div>
+      <div class="ph closing-lion"><img src="assets/work/lion-portrait.jpg" alt="House of Lions brand artwork: a lion" loading="lazy"></div>
     </div>
   </div>
 </section>'''
@@ -107,7 +107,7 @@ def footer():
     return f'''<footer class="site-footer">
   <div class="wrap">
     <div class="foot-top">
-      <div class="foot-col"><img class="foot-logo" src="{LOGO}" alt="House of Lions" width="420" height="199" loading="lazy"></div>
+      <div class="foot-col"><img class="foot-logo" src="assets/work/logo-white.png" alt="House of Lions" width="700" height="332" loading="lazy"></div>
       <div class="foot-col"><h4>Address</h4><address>1st Floor, VI John Tower<br>393, Udyog Vihar Phase 3 Road<br>Phase II, Udyog Vihar, Sector 20<br>Gurugram, Haryana 122016</address></div>
       <div class="foot-col"><h4>Talk to us</h4><a href="mailto:{EMAIL}">{EMAIL}</a><a href="tel:{PHONE_TEL}">{PHONE}</a><a href="tel:{CONSULT_TEL}">{CONSULT}</a></div>
       <div class="foot-col"><h4>Explore</h4>{nav}<span style="height:8px"></span><a href="{LINKEDIN}" rel="noopener" target="_blank">LinkedIn</a><a href="{INSTAGRAM}" rel="noopener" target="_blank">Instagram</a><a href="{FACEBOOK}" rel="noopener" target="_blank">Facebook</a></div>
@@ -129,8 +129,8 @@ def page(slug, title, desc, body, active=None):
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="{wix(IMG["tiger"], 1200, 630)}">
-<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image" content="{SITE}assets/work/lion-roar.jpg">
+<meta property="og:image:width" content="1500"><meta property="og:image:height" content="844">
 <meta property="og:type" content="website"><meta property="og:site_name" content="House of Lions">
 <meta property="og:url" content="{SITE}{"" if slug == "home" else slug + ".html"}">
 <meta name="twitter:card" content="summary_large_image">
@@ -233,11 +233,75 @@ SOP = ["Brand objective", "Audience insight mining", "Strategy development", "St
        "Design and content creation", "Execution", "Monitoring", "Review", "Reporting and recommendations"]
 
 
+MENTORS = [m for m in MENTORS if m[3] in ("akhil", "divya", "nikhil")]
+
+W = "assets/work/"
+
+PROFILES = [
+    dict(key="gulshan", name="Gulshan Group", sector="Real estate", tag="Delhi-NCR\u2019s most iconic luxury real estate project",
+         did=["Image-building podcast", "Pre-launch teaser films", "Pre-launch social media", "Pre-launch EDM", "Print ads", "Topical and event creatives"],
+         intro="For thG by Gulshan, we built a pre-launch world of five-star living: cinematic teasers, a leadership podcast, luxury social media and national print.",
+         hero="gulshan-hero", pair=["gulshan-2", "gulshan-4"],
+         gallery=["gulshan-8", "gulshan-1", "gulshan-2", "gulshan-3", "gulshan-4", "gulshan-5", "gulshan-6", "gulshan-9", "gulshan-7", "gulshan-hero"]),
+    dict(key="vibes", name="Vibes", sector="Beauty and wellness", tag="Young forever",
+         did=["Refreshed branding", "Go-to-market plan", "Rules of engagement", "Reels and bytes", "Influencer campaigns", "#ObesityWeek campaign", "Digital marketing"],
+         intro="VIBES is a leading beauty and wellness brand with 31 clinics across India and Bangladesh. In a cluttered market where price was the only differentiator, we gave the brand a voice people engage with.",
+         hero="vibes-hero", pair=["vibes-1", "vibes-4"],
+         gallery=["vibes-hero", "vibes-1", "vibes-2", "vibes-3", "vibes-4", "vibes-5", "vibes-6", "vibes-7"]),
+    dict(key="whiteland", name="Whiteland Corporation", sector="Real estate", tag="Global outlook, Indian values",
+         did=["Branding", "Corporate communication", "Channel partner communication", "Project launches: Blissville and The Aspen", "Print and collaterals", "Social media"],
+         intro="From the founder\u2019s voice to channel partner programmes and project launches, we shape how Whiteland speaks to buyers, partners and its own people.",
+         hero="whiteland-hero", pair=["whiteland-1", "whiteland-2"],
+         gallery=["whiteland-hero", "whiteland-1", "whiteland-2", "whiteland-3", "whiteland-6", "whiteland-4", "whiteland-5", "whiteland-8", "whiteland-7"]),
+    dict(key="proquest", name="ProQuest", sector="Health and nutrition", tag="Hai junoon",
+         did=["Social media", "Product campaigns", "Promotions", "Expo presence at IHFF"],
+         intro="Bold, high-energy communication for a sports nutrition brand, from product launches and offers to its stall at Asia\u2019s largest health, sports and fitness expo.",
+         hero="proquest-hero", pair=["proquest-1", "proquest-5"],
+         gallery=["proquest-hero", "proquest-1", "proquest-2", "proquest-3", "proquest-4", "proquest-6", "proquest-7", "proquest-5"]),
+]
+
+MORE = [("Srishti Oasis", "Real estate", "more-srishti"), ("Monteria Village", "Hospitality", "more-monteria"),
+        ("OK EV", "Electric vehicles", "more-okev"), ("Morning Owl", "Mattresses", "more-owl"),
+        ("SAMIL", "Pre-owned vehicles and equipment", "more-samil"), ("Radisson Blu: Infini", "Restaurant", "more-infini"),
+        ("The Chopstix.co", "Pan-Asian restaurant", "more-chopstix"), ("Aayom Welfare Society", "NGO", "more-aayom"),
+        ("Sopra Steria", "Consulting and software", "more-sopra")]
+
+CLIENT_NAMES = ["Gulshan Group", "Whiteland", "Vibes", "ProQuest", "WAL Developments", "Srishti Group", "Ithum World",
+                "Shriram Automall", "Radisson Blu", "Sopra Steria", "OK EV", "Monteria Village", "Morning Owl", "The Chopstix.co"]
+
+
+def img(name, alt, cls="", lazy=True):
+    return f'<img src="{W}{name}.jpg" alt="{alt}"{" loading=\"lazy\"" if lazy else ""} decoding="async"{f" class=\"{cls}\"" if cls else ""}>'
+
+
+def feature(p, flip):
+    chips = "".join(f"<span>{d}</span>" for d in p["did"][:4])
+    return f'''<a class="feat{" flip" if flip else ""}" data-cursor="view" href="work.html#{p["key"]}">
+  <div class="feat-media">
+    <div class="ph f-main">{img(p["hero"], p["name"] + " campaign")}</div>
+    <div class="ph f-a">{img(p["pair"][0], p["name"] + " creative")}</div>
+    <div class="ph f-b">{img(p["pair"][1], p["name"] + " creative")}</div>
+  </div>
+  <div class="feat-text">
+    <p class="case-client">{p["sector"]}</p>
+    <h3>{p["name"]}</h3>
+    <p class="feat-tag">{p["tag"]}</p>
+    <p>{p["intro"]}</p>
+    <p class="chips-row">{chips}</p>
+    <span class="link-arrow">See the work <span class="arr" aria-hidden="true">&#8599;</span></span>
+  </div>
+</a>'''
+
+
+def more_grid():
+    return "".join(f'<figure class="more"><div class="ph">{img(f, n)}</div><figcaption><b>{n}</b><span>{sct}</span></figcaption></figure>' for n, sct, f in MORE)
+
+
 def services_list(link=True):
     out = ""
-    previews = ["amit", "tiger", "cafe", "floor", "reception"]
+    previews = ["whiteland-1", "gulshan-9", "vibes-2", "proquest-4", "gulshan-8"]
     for i, (name, text, tint, unit) in enumerate(SERVICES):
-        pv = wix(IMG[previews[i]], 520, 650)
+        pv = W + previews[i] + ".jpg"
         note = f'<span class="cap-note">Delivered by {unit}</span>' if unit else ""
         out += f'''<li class="cap-row"><a href="{"solutions.html#services" if link else "contact.html"}" style="--tint:{tint}" data-preview="{pv}">
   <span class="cap-num">{i + 1:02d}</span>
@@ -264,11 +328,9 @@ def story_teaser(s, flip):
 def home():
     tick = ["Brands boldly amplified", "Designing connections", "Communicate. Engage. Convert.", "Scripting success"]
     t = "".join(f'<span class="ticker-item">{x}<span class="x" aria-hidden="true">&#10033;</span></span>' for x in tick)
-    CLIENTS = "".join(f'<span class="client">{c}</span><span class="dot" aria-hidden="true">&#10033;</span>' for c in ["Gulshan Group", "Shriram Automall", "Vibes", "Baxy", "Monteria Village", "Memsaheb"])
-    stories = "".join(story_teaser(s, i % 2 == 1) for i, s in enumerate(STORIES))
+    CLIENTS = "".join(f'<span class="client">{c}</span><span class="dot" aria-hidden="true">&#10033;</span>' for c in CLIENT_NAMES)
+    feats = "".join(feature(p, i % 2 == 1) for i, p in enumerate(PROFILES))
     why = "".join(f'<li><span class="n">{i + 1:02d}</span><b>{w}</b></li>' for i, w in enumerate(WHY))
-    voices = "".join(f'''<figure class="voice"><blockquote>“{q}”</blockquote>
-<figcaption><img src="{wix(IMG[img], 160, 160)}" alt="{n}" width="56" height="56" loading="lazy"><span><b>{n}</b>{r}</span></figcaption></figure>''' for q, n, r, img in QUOTES)
     ins = "".join(f'<a href="{u}" target="_blank" rel="noopener"><span class="meta"><span>{d}</span><span>2 min read</span></span><h3>{h}</h3><p>{x}</p></a>' for h, x, d, u in POSTS)
 
     body = f'''
@@ -276,7 +338,7 @@ def home():
   <div class="wrap grid hero-grid">
     <div class="hero-copy">
       <p class="eyebrow rise">House of Lions &nbsp;/&nbsp; Brand and communication consultancy</p>
-      <h1 class="rise d1">EV to café, beauty to real estate, Gurugram to <em>Paris.</em></h1>
+      <h1 class="rise d1">EV to café, beauty to real estate, Gurugram to <em>the world.</em></h1>
       <p class="hero-sub rise d2">We are an Indian agency taking the world by storm.</p>
       <div class="actions rise d3">
         <a class="btn btn-primary" href="tel:{CONSULT_TEL}">Call for free consultation <span class="arr" aria-hidden="true">&#8599;</span></a>
@@ -299,12 +361,11 @@ def home():
 <section class="band band-ink section" aria-labelledby="amp-title">
   <div class="wrap grid statement">
     <div class="st-text">
-      <p class="eyebrow">What we do</p>
       <h2 id="amp-title" class="d-xl">Brands boldly <em>amplified.</em></h2>
       <p class="big muted">Discover the art and science of crafting compelling narrative that sets the brand temperature soaring high, with better traction, engagement and ROI.</p>
       <div class="sub-statement"><h3>Designing connections</h3><p class="muted">Out-of-the-box, vertical defining and future ready.</p></div>
     </div>
-    <div class="st-media">{photo("tiger", 900, 1125, "A bold tiger mural in the House of Lions studio")}</div>
+    <div class="st-media"><div class="ph lion-ph">{img("lion-boss", "A lion in a leather armchair, House of Lions brand artwork")}</div></div>
   </div>
 </section>
 
@@ -319,15 +380,10 @@ def home():
   </div>
 </section>
 
-<section class="clients" aria-labelledby="clients-title">
-  <div class="wrap"><p class="eyebrow" id="clients-title">Brands we\u2019ve worked with</p></div>
-  <div class="clients-track-wrap"><div class="clients-track">{CLIENTS}{CLIENTS}</div></div>
-</section>
-
-<section class="section band band-paper" id="services" aria-labelledby="svc-title">
+<section class="band band-ink section svc-dark" id="services" aria-labelledby="svc-title">
   <div class="wrap">
     <div class="sec-head">
-      <h2 id="svc-title" class="d-xl">Breaking through the <em>noise.</em></h2>
+      <div style="grid-column:1/span 8;display:grid;gap:20px"><p class="eyebrow">What we do</p><h2 id="svc-title" class="d-xl">Breaking through the <em>noise.</em></h2></div>
       <div class="intro"><a class="link-arrow" href="solutions.html">All solutions <span class="arr" aria-hidden="true">&#8599;</span></a></div>
     </div>
     <ul class="cap-list">{services_list()}</ul>
@@ -337,11 +393,23 @@ def home():
 <section class="section" id="work" aria-labelledby="work-title">
   <div class="wrap">
     <div class="sec-head">
-      <h2 id="work-title" class="d-xl">Client <em>stories.</em></h2>
-      <p class="intro">We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p>
+      <h2 id="work-title" class="d-xl">Success <em>saga.</em></h2>
+      <div class="intro" style="display:grid;gap:18px;justify-items:start"><p>We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p><a class="link-arrow" href="work.html">All work <span class="arr" aria-hidden="true">&#8599;</span></a></div>
     </div>
-    <div class="work-list">{stories}</div>
+    <div class="feat-list">{feats}</div>
   </div>
+</section>
+
+<section class="section band band-paper" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="more-title" class="d-l">More <em>work.</em></h2></div>
+    <div class="more-grid">{more_grid()}</div>
+  </div>
+</section>
+
+<section class="clients" aria-labelledby="clients-title">
+  <div class="wrap"><p class="eyebrow" id="clients-title">Brands we\u2019ve worked with</p></div>
+  <div class="clients-track-wrap"><div class="clients-track">{CLIENTS}{CLIENTS}</div></div>
 </section>
 
 <section class="band band-sage section" aria-labelledby="why-title">
@@ -364,16 +432,6 @@ def home():
   </div>
 </section>
 
-<section class="section band band-paper" aria-labelledby="voice-title">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2 id="voice-title" class="d-xl">It’s all about a <em>dialogue.</em></h2>
-      <p class="intro">A few words from our clients.</p>
-    </div>
-    <div class="voices">{voices}</div>
-  </div>
-</section>
-
 <section class="section" aria-labelledby="ins-title">
   <div class="wrap">
     <div class="sec-head">
@@ -386,7 +444,7 @@ def home():
 
 {closing()}
 '''
-    return page("home", "House of Lions", "House of Lions is an integrated brand and communication consultancy. EV to café, beauty to real estate, Gurugram to Paris.", body, "home")
+    return page("home", "House of Lions", "House of Lions is an integrated brand and communication consultancy. EV to café, beauty to real estate, Gurugram to the world.", body, "home")
 
 
 # ---------- ABOUT ----------
@@ -497,14 +555,51 @@ def solutions():
 
 <section class="section" aria-labelledby="cs-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="cs-title" class="d-xl">Client <em>stories.</em></h2><p class="intro">We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p></div>
-    {cs}
+    <div class="sec-head"><h2 id="cs-title" class="d-xl">Success <em>saga.</em></h2><div class="intro" style="display:grid;gap:18px;justify-items:start"><p>We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p><a class="link-arrow" href="work.html">All work <span class="arr" aria-hidden="true">&#8599;</span></a></div></div>
+    <div class="feat-list">{"".join(feature(p, i % 2 == 1) for i, p in enumerate(PROFILES))}</div>
   </div>
 </section>
 
 {closing()}
 '''
     return page("solutions", "Solutions, House of Lions", "Personal branding, branding, social media, performance marketing and PR, with The Cub House, Mavcomm and TABB Solutions.", body, "solutions")
+
+
+# ---------- WORK ----------
+def work():
+    out = ""
+    for p in PROFILES:
+        chips = "".join(f"<span>{d}</span>" for d in p["did"])
+        gal = "".join(f'<div class="ph">{img(g, p["name"] + " creative")}</div>' for g in p["gallery"])
+        out += f'''<article class="profile" id="{p["key"]}">
+  <div class="profile-head">
+    <p class="cat"><b>{p["sector"]}</b></p>
+    <h2>{p["name"]}</h2>
+    <p class="feat-tag">{p["tag"]}</p>
+    <p class="profile-intro">{p["intro"]}</p>
+    <div><p class="did-label">What we did</p><p class="chips-row">{chips}</p></div>
+  </div>
+  <div class="gallery">{gal}</div>
+</article>'''
+    nav = "".join(f'<a class="link-arrow" href="#{p["key"]}" style="border-bottom-width:1px">{p["name"]}</a>' for p in PROFILES)
+    body = f'''
+<section class="page-hero">
+  <div class="wrap grid">
+    <p class="eyebrow rise">Work</p>
+    <h1 class="rise d1">Success <em>saga.</em></h1>
+    <div class="ph-copy rise d2"><p>We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p><div class="actions" style="gap:12px 24px;margin-top:12px">{nav}</div></div>
+  </div>
+</section>
+<div class="wrap">{out}</div>
+<section class="section band band-paper" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="more-title" class="d-xl">More <em>work.</em></h2></div>
+    <div class="more-grid">{more_grid()}</div>
+  </div>
+</section>
+{closing()}
+'''
+    return page("work", "Work, House of Lions", "Client work by House of Lions: Gulshan Group, Vibes, Whiteland Corporation, ProQuest and more.", body, "work")
 
 
 # ---------- INSIGHTS ----------
@@ -587,14 +682,14 @@ LDJSON = ('<script type="application/ld+json">' + json.dumps({
 FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#17140F"/>'
            '<text x="32" y="42" font-family="Georgia,serif" font-size="24" text-anchor="middle" fill="#F0ECE4">HOL</text></svg>')
 
-PAGES = {"index.html": home, "about.html": about, "solutions.html": solutions,
+PAGES = {"index.html": home, "about.html": about, "solutions.html": solutions, "work.html": work,
          "insights.html": insights, "contact.html": contact}
 
 
 def main():
     with open(os.path.join(ROOT, "assets", "favicon.svg"), "w") as f:
         f.write(FAVICON)
-    for old in ("capabilities.html", "work.html", "perspectives.html"):
+    for old in ("capabilities.html", "perspectives.html"):
         p = os.path.join(ROOT, old)
         if os.path.exists(p):
             os.remove(p)
