@@ -62,7 +62,7 @@ a { color: inherit; }
 
 /* ---------- Type ---------- */
 h1, h2, h3, h4, .display { font-family: var(--f-display); font-weight: 650; letter-spacing: -0.035em; line-height: 1; margin: 0; text-wrap: balance; font-variation-settings: "opsz" 96; }
-.condensed, .hero h1, .page-hero h1, .closing h2, .foot-mark, .board-word, .art .big, .cs-head h2 { font-stretch: 82%; font-variation-settings: "opsz" 96, "wdth" 82; }
+h1, h2, h3, h4, .display, .foot-mark, .board-word, .art .big, .post-art span, .cap-title, .steps .n, .facts b { font-stretch: 100%; font-variation-settings: "opsz" 96, "wdth" 100; }
 .d-xxl { font-size: clamp(52px, 7.4vw, 112px); line-height: .94; letter-spacing: -0.045em; }
 .d-xl { font-size: clamp(44px, 6vw, 92px); line-height: .96; letter-spacing: -0.042em; }
 .d-l { font-size: clamp(36px, 4.6vw, 68px); line-height: 1; }
