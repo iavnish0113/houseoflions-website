@@ -1,6 +1,6 @@
 # House of Lions website
 
-Sample redesign of [houseoflions.in](https://www.houseoflions.in): a static, six-page site (Home, About, Capabilities, Work, Perspectives, Contact) with no build tools needed to host it.
+Sample redesign of [houseoflions.in](https://www.houseoflions.in): a static, five-page site (Home, About, Solutions, Insights, Contact) with no build tools needed to host it.
 
 ## Run it locally
 
