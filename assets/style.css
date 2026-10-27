@@ -607,8 +607,10 @@ body { font-size: 17px; }
 @media (max-width: 900px) { .sop { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sop li, .sop li:not(:nth-child(5n+1)) { padding: 20px 14px 20px 0; border-left: 0; } .sop li:nth-child(even) { padding-left: 14px; border-left: 1px solid var(--line); } }
 
 /* Units with logos */
-.unit-logo { background: var(--night); border-radius: 16px; aspect-ratio: 16 / 9; display: grid; place-items: center; padding: 18px; margin-bottom: 8px; }
-.unit-logo img { max-height: 100%; max-width: 80%; object-fit: contain; }
+.unit { min-width: 0; }
+.unit-logo { background: #000; border-radius: 16px; height: 200px; display: flex; align-items: center; justify-content: center; padding: 20px; margin-bottom: 8px; overflow: hidden; }
+.unit-logo.light { background: #fff; }
+.unit-logo img { display: block; width: auto; height: auto; max-height: 160px; max-width: 85%; object-fit: contain; }
 
 /* Wide photo band */
 .photo-band { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: clamp(10px, 1.4vw, 20px); }

@@ -7,7 +7,7 @@
 import math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "6"  # bump to bust browser caches after CSS/JS changes
+V = "7"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -442,7 +442,7 @@ def solutions():
     units = [("The Cub House", "Social media", "From strategy to storytelling, we craft insight-driven campaigns, engage audiences and drive measurable results. Our creative flair amplifies your brand’s voice across every platform. Trust us to make your social presence impactful.", "cubhouse"),
              ("Mavcomm", "Public relations", "Elevating brands and captivating audiences, we specialise in media relations, influencer partnerships, crisis management and brand PR strategy. Whether launching a new product, managing a reputation or building long-term brand awareness, we have a track record of success and a passion for innovation.", "mavcomm"),
              ("TABB Solutions", "Digital", "A leading provider of comprehensive digital solutions, empowering businesses of all sizes to thrive in the digital age. From digital marketing to website development, SEO to performance, we provide it all.", "tabb")]
-    u = "".join(f'<article class="unit" style="background:var(--paper)"><div class="unit-logo"><img src="https://static.wixstatic.com/media/{IMG[k]}/v1/fit/w_600,h_340,q_90,enc_auto/{k}.png" alt="{n} logo" loading="lazy"></div><p class="role">{r}</p><h3>{n}</h3><p>{b}</p></article>' for n, r, b, k in units)
+    u = "".join(f'<article class="unit" style="background:var(--paper)"><div class="unit-logo{" light" if k == "tabb" else ""}"><img src="https://static.wixstatic.com/media/{IMG[k]}/v1/fit/w_600,h_340,q_90,enc_auto/{k}.png" alt="{n} logo" loading="lazy"></div><p class="role">{r}</p><h3>{n}</h3><p>{b}</p></article>' for n, r, b, k in units)
     cs = ""
     for s in STORIES:
         cs += f'''<article class="cs" id="{s["key"]}">
