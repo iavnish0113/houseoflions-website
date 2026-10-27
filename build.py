@@ -7,7 +7,7 @@
 import math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "5"  # bump to bust browser caches after CSS/JS changes
+V = "6"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -309,7 +309,7 @@ def home():
   <div class="wrap">
     <div class="sec-head">
       <h2 id="svc-title" class="d-xl">Breaking through the <em>noise.</em></h2>
-      <p class="intro">Brand strategy, identity, social, performance and PR, integrated under one House and delivered with our specialist agencies.</p>
+      <div class="intro"><a class="link-arrow" href="solutions.html">All solutions <span class="arr" aria-hidden="true">&#8599;</span></a></div>
     </div>
     <ul class="cap-list">{services_list()}</ul>
   </div>
