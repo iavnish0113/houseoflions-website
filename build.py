@@ -427,7 +427,7 @@ def about():
         <p class="muted body-l">A master storyteller, he is a best-selling author and visiting faculty at top management and design institutes.</p>
       </div>
     </div>
-    <div class="sec-head"><h2 id="m-title" class="d-xl">Our <em>mentors.</em></h2><p class="intro">Experience across photography, media, PR, digital and the country’s top agencies.</p></div>
+    <div class="sec-head"><h2 id="m-title" class="d-xl">Our <em>mentors.</em></h2></div>
     <div class="mentor-grid photos">{m}</div>
   </div>
 </section>
