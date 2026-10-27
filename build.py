@@ -103,7 +103,7 @@ def page(slug, title, desc, body, active=None):
 <meta name="theme-color" content="#F0ECE4">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 {FONTS}
-<link rel="stylesheet" href="assets/style.css?v=3">
+<link rel="stylesheet" href="assets/style.css?v=4">
 </head>
 <body class="p-{slug}">
 {header(active)}
@@ -111,7 +111,7 @@ def page(slug, title, desc, body, active=None):
 {body}
 </main>
 {footer()}
-<script src="assets/main.js?v=3"></script>
+<script src="assets/main.js?v=4"></script>
 </body>
 </html>
 '''
