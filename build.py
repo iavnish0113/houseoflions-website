@@ -4,10 +4,10 @@
   python3 build.py            -> writes the pages into ./ (GitHub Pages ready)
   python3 build.py --preview  -> also writes ./_preview/ for the Claude artifact preview
 """
-import math, os, re, shutil, sys
+import json, math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "8"  # bump to bust browser caches after CSS/JS changes
+V = "9"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -24,6 +24,7 @@ CONSULT_TEL = "+919999492649"
 LINKEDIN = "https://www.linkedin.com/company/houseoflions/"
 INSTAGRAM = "https://www.instagram.com/houseoflions_consultancy/"
 FACEBOOK = "https://www.facebook.com/www.houseoflions.net"
+SITE = "https://iavnish0113.github.io/houseoflions-website/"
 PORTFOLIO = "https://www.houseoflions.in/_files/ugd/04e63d_a045211deaec47aa8413aea8f163c6d7.pdf"
 PROFILE = "https://www.houseoflions.in/_files/ugd/04e63d_12c48e3e2cae4ffea04cd1f5bf3c1c03.pdf"
 
@@ -128,7 +129,14 @@ def page(slug, title, desc, body, active=None):
 <meta name="description" content="{desc}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="{LOGO}">
+<meta property="og:image" content="{wix(IMG["tiger"], 1200, 630)}">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:type" content="website"><meta property="og:site_name" content="House of Lions">
+<meta property="og:url" content="{SITE}{"" if slug == "home" else slug + ".html"}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="{SITE}{"" if slug == "home" else slug + ".html"}">
+<meta name="view-transition" content="same-origin">
+{LDJSON if slug == "home" else ""}
 <meta name="theme-color" content="#F0ECE4">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 {FONTS}
@@ -140,7 +148,10 @@ def page(slug, title, desc, body, active=None):
 {body}
 </main>
 {footer()}
-<script src="assets/main.js?v={V}"></script>
+<a class="wa" href="https://wa.me/919999492649?text=Hi%20House%20of%20Lions%2C%20I%27d%20like%20to%20talk%20about%20my%20brand." target="_blank" rel="noopener" aria-label="Chat with House of Lions on WhatsApp"><svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.8-3.8-1.8-5.9C5 10 9.9 5.2 16 5.2S27 10 27 15.9 22.1 26.4 16 26.4zm6-7.8c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a9 9 0 0 1-2.6-1.6 9.8 9.8 0 0 1-1.8-2.2c-.2-.3 0-.5.1-.7l.5-.6.3-.5v-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.1-1.2 2.7 1.2 3.1 1.4 3.3 2.3 3.6 5.6 5c.8.3 1.4.5 1.9.7.8.2 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5s.3-1.4.2-1.5-.3-.2-.6-.4z"/></svg><span>WhatsApp us</span></a>
+<div class="cursor-pv" aria-hidden="true"><img alt=""><span>View</span></div>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
+<script src="assets/main.js?v={V}" defer></script>
 </body>
 </html>
 '''
@@ -224,9 +235,11 @@ SOP = ["Brand objective", "Audience insight mining", "Strategy development", "St
 
 def services_list(link=True):
     out = ""
+    previews = ["amit", "tiger", "cafe", "floor", "reception"]
     for i, (name, text, tint, unit) in enumerate(SERVICES):
+        pv = wix(IMG[previews[i]], 520, 650)
         note = f'<span class="cap-note">Delivered by {unit}</span>' if unit else ""
-        out += f'''<li class="cap-row"><a href="{"solutions.html#services" if link else "contact.html"}" style="--tint:{tint}">
+        out += f'''<li class="cap-row"><a href="{"solutions.html#services" if link else "contact.html"}" style="--tint:{tint}" data-preview="{pv}">
   <span class="cap-num">{i + 1:02d}</span>
   <span class="cap-title">{name}</span>
   <span class="cap-desc"><p>{text}</p>{note}</span>
@@ -236,7 +249,7 @@ def services_list(link=True):
 
 
 def story_teaser(s, flip):
-    return f'''<a class="case{" flip" if flip else ""}" href="solutions.html#{s["key"]}">
+    return f'''<a class="case{" flip" if flip else ""}" data-cursor="view" href="solutions.html#{s["key"]}">
   <div class="case-art">{ART[s["key"]]()}</div>
   <div class="case-text">
     <p class="case-client">{s["sector"]}</p>
@@ -251,6 +264,7 @@ def story_teaser(s, flip):
 def home():
     tick = ["Brands boldly amplified", "Designing connections", "Communicate. Engage. Convert.", "Scripting success"]
     t = "".join(f'<span class="ticker-item">{x}<span class="x" aria-hidden="true">&#10033;</span></span>' for x in tick)
+    CLIENTS = "".join(f'<span class="client">{c}</span><span class="dot" aria-hidden="true">&#10033;</span>' for c in ["Gulshan Group", "Shriram Automall", "Vibes", "Baxy", "Monteria Village", "Memsaheb"])
     stories = "".join(story_teaser(s, i % 2 == 1) for i, s in enumerate(STORIES))
     why = "".join(f'<li><span class="n">{i + 1:02d}</span><b>{w}</b></li>' for i, w in enumerate(WHY))
     voices = "".join(f'''<figure class="voice"><blockquote>“{q}”</blockquote>
@@ -303,6 +317,11 @@ def home():
     </div>
     <div class="st-media"><div class="duo">{photo("lounge", 700, 875, "The studio lounge")}{photo("cafe", 600, 800, "The studio café")}</div></div>
   </div>
+</section>
+
+<section class="clients" aria-labelledby="clients-title">
+  <div class="wrap"><p class="eyebrow" id="clients-title">Brands we\u2019ve worked with</p></div>
+  <div class="clients-track-wrap"><div class="clients-track">{CLIENTS}{CLIENTS}</div></div>
 </section>
 
 <section class="section band band-paper" id="services" aria-labelledby="svc-title">
@@ -398,10 +417,10 @@ def about():
   <div class="wrap">
     <div class="sec-head"><h2 id="num-title" class="d-xl">Us in <em>numbers.</em></h2></div>
     <div class="facts" style="border-top-color:rgba(240,236,228,.4)">
-      <div style="border-left-color:rgba(240,236,228,.14)"><b>4</b><span class="muted">Offices: Delhi, Gurugram, Mumbai and Paris</span></div>
-      <div style="border-left-color:rgba(240,236,228,.14)"><b>4</b><span class="muted">Verticals</span></div>
-      <div style="border-left-color:rgba(240,236,228,.14)"><b>100+</b><span class="muted">Campaign-experienced team</span></div>
-      <div style="border-left-color:rgba(240,236,228,.14)"><b>80+</b><span class="muted">Team size</span></div>
+      <div style="border-left-color:rgba(240,236,228,.14)"><b data-count="4">4</b><span class="muted">Offices: Delhi, Gurugram, Mumbai and Paris</span></div>
+      <div style="border-left-color:rgba(240,236,228,.14)"><b data-count="4">4</b><span class="muted">Verticals</span></div>
+      <div style="border-left-color:rgba(240,236,228,.14)"><b data-count="100" data-suffix="+">100+</b><span class="muted">Campaign-experienced team</span></div>
+      <div style="border-left-color:rgba(240,236,228,.14)"><b data-count="80" data-suffix="+">80+</b><span class="muted">Team size</span></div>
     </div>
   </div>
 </section>
@@ -555,6 +574,16 @@ def contact():
     return page("contact", "Contact House of Lions", "Contact House of Lions: amit@houseoflions.in, +91 88829 77667. VI John Tower, Udyog Vihar, Gurugram.", body, "contact")
 
 
+LDJSON = ('<script type="application/ld+json">' + json.dumps({
+    "@context": "https://schema.org", "@type": "ProfessionalService", "name": "House of Lions",
+    "description": "Integrated brand and communication consultancy: personal branding, branding, social media, performance marketing and public relations.",
+    "url": SITE, "logo": LOGO, "email": EMAIL, "telephone": PHONE_TEL,
+    "founder": {"@type": "Person", "name": "Amit Shankar"},
+    "address": {"@type": "PostalAddress", "streetAddress": "1st Floor, VI John Tower, 393, Udyog Vihar Phase 3 Road, Sector 20",
+                "addressLocality": "Gurugram", "addressRegion": "Haryana", "postalCode": "122016", "addressCountry": "IN"},
+    "areaServed": ["Delhi", "Gurugram", "Mumbai", "Paris"],
+    "sameAs": [LINKEDIN, INSTAGRAM, FACEBOOK]}) + '</script>')
+
 FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#17140F"/>'
            '<text x="32" y="42" font-family="Georgia,serif" font-size="24" text-anchor="middle" fill="#F0ECE4">HOL</text></svg>')
 
@@ -575,6 +604,11 @@ def main():
         built[name] = html
         with open(os.path.join(ROOT, name), "w") as f:
             f.write(html)
+    with open(os.path.join(ROOT, "sitemap.xml"), "w") as f:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                + "".join(f"  <url><loc>{SITE}{'' if n == 'index.html' else n}</loc></url>\n" for n in PAGES) + "</urlset>\n")
+    with open(os.path.join(ROOT, "robots.txt"), "w") as f:
+        f.write(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n")
     if "--preview" in sys.argv:
         pv = os.path.join(ROOT, "_preview")
         shutil.rmtree(pv, ignore_errors=True)
