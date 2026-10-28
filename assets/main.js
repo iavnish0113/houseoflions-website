@@ -245,3 +245,39 @@
     });
   }
 })();
+
+/* ===================== v5: hero film sound toggle + HOL movie ===================== */
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reel = document.getElementById('reel');
+  var btn = document.querySelector('.reel-sound');
+  if (reel) {
+    if (reduce) { reel.removeAttribute('autoplay'); reel.pause(); reel.controls = true; }
+    if (btn) btn.addEventListener('click', function () {
+      var turnOn = reel.muted;
+      reel.muted = !turnOn;
+      if (turnOn) { reel.currentTime = 0; reel.loop = false; }
+      var p = reel.play(); if (p && p.catch) p.catch(function () {});
+      btn.setAttribute('aria-pressed', turnOn ? 'true' : 'false');
+      btn.querySelector('.txt').textContent = turnOn ? 'Sound off' : 'Sound on';
+    });
+    reel.addEventListener('ended', function () { reel.muted = true; reel.loop = true; reel.play(); if (btn) { btn.setAttribute('aria-pressed', 'false'); btn.querySelector('.txt').textContent = 'Sound on'; } });
+    // Pause the hero film when it scrolls out of view
+    if ('IntersectionObserver' in window && !reduce) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { var p = reel.play(); if (p && p.catch) p.catch(function () {}); } else reel.pause(); });
+      }, { threshold: 0.15 }).observe(reel);
+    }
+  }
+  var film = document.getElementById('film');
+  var play = document.querySelector('.film-play');
+  if (film && play) {
+    play.addEventListener('click', function () {
+      if (reel && !reel.muted) { reel.muted = true; if (btn) { btn.setAttribute('aria-pressed', 'false'); btn.querySelector('.txt').textContent = 'Sound on'; } }
+      film.closest('.film-frame').classList.add('playing');
+      film.muted = false;
+      var p = film.play(); if (p && p.catch) p.catch(function () {});
+      film.focus();
+    });
+  }
+})();

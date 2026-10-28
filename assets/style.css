@@ -749,3 +749,74 @@ a.feat:hover .feat-media img { transform: scale(1.04); }
 .closing-lion { aspect-ratio: 16 / 10; max-width: 460px; border-radius: 20px; }
 .closing-lion img { width: 100%; height: 100%; object-fit: cover; }
 .foot-logo { filter: none; height: 60px; opacity: 1; }
+
+/* ===================== v5: royal blue, hero film, logos, socials ===================== */
+:root {
+  --night: #1D3B96;        /* royal blue: replaces black bands */
+  --royal-deep: #142C73;   /* footer */
+  --ink: #111A3E;          /* deep navy text instead of black */
+  --ink-2: #4B5372;
+  --ink-3: #868BA3;
+  --line: rgba(17, 26, 62, .14);
+  --line-strong: rgba(17, 26, 62, .45);
+}
+.btn-primary { background: var(--night); border-color: var(--night); color: #fff; }
+.btn-primary:hover { background: var(--marigold); border-color: var(--marigold); color: var(--ink); }
+.site-footer { background: var(--royal-deep); }
+.band-ink { background: var(--night); }
+.cursor-pv span { color: var(--ink); }
+
+/* Header socials */
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.socials { display: flex; gap: 6px; align-items: center; }
+.socials a { width: 36px; height: 36px; border-radius: 50%; display: inline-grid; place-items: center; color: inherit; text-decoration: none; transition: background .25s, color .25s; }
+.socials a:hover { background: var(--night); color: #fff; }
+.site-footer .socials a:hover, .mobile-menu .socials a:hover { background: var(--marigold); color: var(--ink); }
+.site-footer .socials { margin-top: 8px; margin-left: -8px; }
+.mobile-menu .socials { margin-top: 12px; margin-left: -8px; }
+.handle { opacity: .6; font-size: 13.5px; margin-left: 6px; }
+@media (max-width: 960px) { .nav-right { display: none; } }
+@media (max-width: 1140px) and (min-width: 961px) { .nav-socials { display: none; } }
+
+/* Hero: headline + film */
+.hero h1 { font-size: clamp(58px, 7.8vw, 128px); }
+.hero-line { font-family: var(--f-display); font-style: italic; font-size: clamp(26px, 2.6vw, 40px); line-height: 1.12; color: var(--night); max-width: 24ch; }
+.hero-small { font-size: 18px; color: var(--ink-2); margin-top: -12px; }
+.hero-aside { display: flex; justify-content: flex-end; }
+.reel { position: relative; margin: 0; width: min(100%, 400px); }
+.reel video { display: block; width: 100%; aspect-ratio: 9 / 16; max-height: 74vh; object-fit: cover; border-radius: 28px; background: var(--night); box-shadow: 0 40px 80px -40px rgba(17,26,62,.55); }
+.reel figcaption { margin-top: 12px; font-size: 13.5px; color: var(--ink-2); }
+.reel-sound { position: absolute; left: 16px; bottom: 48px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border: 0; border-radius: 99px; background: rgba(255,255,255,.92); color: var(--ink); font: 500 14px var(--f-body); cursor: pointer; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background .25s, transform .25s; }
+.reel-sound:hover { background: var(--marigold); transform: translateY(-2px); }
+.reel-sound .ico { width: 18px; height: 18px; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.6 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z'/%3E%3C/svg%3E") center/contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 5V4L7 9H3zm13.6 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z'/%3E%3C/svg%3E") center/contain no-repeat; }
+@media (max-width: 960px) { .hero-aside { justify-content: flex-start; } .reel { width: min(100%, 360px); } }
+
+/* Merged "Stories told with a roar" collage */
+.roar .statement { align-items: center; }
+.roar-collage { display: grid; grid-template-columns: 1.5fr 1fr; grid-template-rows: 1fr 1fr; gap: clamp(10px, 1.2vw, 18px); }
+.roar-collage .r-main { grid-row: span 2; aspect-ratio: 4 / 5; }
+.roar-collage .r-a, .roar-collage .r-b { aspect-ratio: auto; min-height: 0; }
+.roar-collage .ph { border-radius: 20px; }
+.roar-collage .ph img { width: 100%; height: 100%; object-fit: cover; }
+.roar-collage .r-main img { object-position: 58% 50%; }
+
+/* Film */
+.film-frame { position: relative; border-radius: 28px; overflow: hidden; background: #0d1c4d; aspect-ratio: 16 / 9; max-width: 100%; }
+.film-frame video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.film-play { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; border: 0; cursor: pointer; color: #fff; background: linear-gradient(180deg, rgba(13,28,77,.15), rgba(13,28,77,.55)); font-family: var(--f-body); }
+.film-play span { width: clamp(72px, 9vw, 112px); aspect-ratio: 1; border-radius: 50%; background: var(--marigold); display: grid; place-items: center; transition: transform .4s var(--ease); }
+.film-play span::after { content: ""; border-left: 22px solid var(--ink); border-top: 14px solid transparent; border-bottom: 14px solid transparent; margin-left: 6px; }
+.film-play:hover span { transform: scale(1.08); }
+.film-play b { font-family: var(--f-display); font-weight: 400; font-size: clamp(28px, 3vw, 44px); }
+.film-play small { font-size: 14px; opacity: .85; }
+.film-frame.playing .film-play { display: none; }
+
+/* Logos */
+.logo-head { line-height: 0; }
+.brand-logo { height: clamp(44px, 4.4vw, 64px); width: auto; max-width: 100%; display: block; }
+.brand-logo.big { height: clamp(56px, 6vw, 92px); }
+.more figcaption .more-logo { height: 34px; width: auto; }
+.client { padding-inline: clamp(28px, 3.4vw, 56px); display: inline-flex; align-items: center; }
+.client-logo { height: clamp(40px, 4vw, 58px); width: auto; max-width: 220px; object-fit: contain; opacity: .9; }
+.clients-track { animation-duration: 40s; }
+.clients { padding-block: clamp(40px, 5vw, 64px); }
