@@ -825,3 +825,4 @@ a.feat:hover .feat-media img { transform: scale(1.04); }
 @media (max-width: 960px) { .foot-top .foot-col:nth-child(n) { grid-column: span 6; } }
 @media (max-width: 520px) { .foot-top .foot-col:nth-child(n) { grid-column: 1 / -1; } }
 .reel-sound { bottom: auto; top: 14px; left: auto; right: 14px; }
+.mentor .m-photo img { object-position: 50% 22%; }

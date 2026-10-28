@@ -7,7 +7,7 @@
 import json, math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "12"  # bump to bust browser caches after CSS/JS changes
+V = "13"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -249,6 +249,14 @@ SOP = ["Brand objective", "Audience insight mining", "Strategy development", "St
 
 
 MENTORS = [m for m in MENTORS if m[3] in ("akhil", "divya", "nikhil")]
+EXT_PHOTO = {"anita": "https://www.divyaum.com/founders/anita.jpeg", "avnish": "https://www.divyaum.com/founders/avnish.png"}
+MENTORS = [("Anita Ajwani", "Director, Planning", "Two decades in hospitality, branding and experiential strategy. A serial entrepreneur, founder of Memsaheb and Woman Entrepreneur of the Year 2024.", "anita")] + MENTORS + [
+    ("Avnish Dhoundiyal", "Creative Mentor", "Traveller and photographer, creating content across real and AI-driven formats.", "avnish")]
+
+
+def mentor_photo(k, n):
+    src = EXT_PHOTO.get(k) or wix(IMG[k], 640, 800)
+    return f'<img src="{src}" alt="{n}" width="640" height="800" loading="lazy">'
 
 W = "assets/work/"
 
@@ -489,7 +497,7 @@ def home():
 # ---------- ABOUT ----------
 def about():
     sop = "".join(f'<li><span class="n">{i + 1:02d}</span><span>{s}</span></li>' for i, s in enumerate(SOP))
-    m = "".join(f'''<article class="mentor"><div class="m-photo"><img src="{wix(IMG[k], 640, 800)}" alt="{n}" width="640" height="800" loading="lazy"></div><p class="role">{r}</p><h3>{n}</h3><p>{b}</p></article>''' for n, r, b, k in MENTORS)
+    m = "".join(f'''<article class="mentor"><div class="m-photo">{mentor_photo(k, n)}</div><p class="role">{r}</p><h3>{n}</h3><p>{b}</p></article>''' for n, r, b, k in MENTORS)
     body = f'''
 <section class="page-hero">
   <div class="wrap grid">
