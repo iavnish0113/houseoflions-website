@@ -153,7 +153,12 @@
           btn.disabled = false; btn.innerHTML = label;
           if (!ok) {
             err.hidden = false;
-            err.textContent = 'Your message could not be sent. Please email amit@houseoflions.in or call +91 99994 92649.';
+            var body = 'Name: ' + payload.name + '\nEmail: ' + email +
+              (payload.company ? '\nCompany: ' + payload.company : '') +
+              (payload.industry ? '\nIndustry: ' + payload.industry : '') + '\n\n' + msg;
+            var mailto = 'mailto:amit@houseoflions.in?subject=' + encodeURIComponent('Enquiry from houseoflions.in: ' + name) +
+              '&body=' + encodeURIComponent(body);
+            err.innerHTML = 'Our form is having trouble right now. <a href="' + mailto + '" style="text-decoration:underline">Send it by email instead</a> (your message is already filled in) or call <a href="tel:+919999492649" style="text-decoration:underline">+91 99994 92649</a>.';
             return;
           }
           form.hidden = true;
