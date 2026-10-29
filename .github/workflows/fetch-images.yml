@@ -1,0 +1,30 @@
+name: Fetch external images
+on:
+  workflow_dispatch:
+  push:
+    paths: ["assets/img/sources.tsv"]
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download images listed in sources.tsv
+        run: |
+          set -e
+          UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+          while IFS=$'\t' read -r url name; do
+            [ -z "$url" ] && continue
+            if [ ! -s "assets/img/$name" ]; then
+              curl -fsSL -A "$UA" -H "Referer: https://www.divyaum.com/" -o "assets/img/$name" "$url" && echo "ok $name" || echo "FAILED $url"
+            fi
+          done < assets/img/sources.tsv
+          ls -la assets/img
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add assets/img
+          git diff --cached --quiet || git commit -m "Add images downloaded from external hosts"
+          git push
