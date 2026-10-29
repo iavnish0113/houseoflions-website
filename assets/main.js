@@ -133,12 +133,35 @@
         return;
       }
       err.hidden = true;
-      // Wire this to your form backend (Formspree, Netlify Forms, HubSpot) before launch.
-      form.hidden = true;
-      var done = document.querySelector('.form-done');
-      done.querySelector('[data-first]').textContent = name.split(' ')[0];
-      done.hidden = false;
-      done.setAttribute('tabindex', '-1'); done.focus();
+      var hp = form.querySelector('[name="_honey"]');
+      if (hp && hp.value) return; // spam bot
+      var btn = form.querySelector('button[type="submit"]');
+      var label = btn.innerHTML;
+      btn.disabled = true; btn.textContent = 'Sending…';
+      var val = function (id) { var el = form.querySelector(id); return el ? el.value.trim() : ''; };
+      var payload = {
+        name: (name + ' ' + val('#f-last')).trim(), email: email, industry: val('#f-industry'),
+        company: val('#f-company'), message: msg,
+        _subject: 'New enquiry from houseoflions.in: ' + name, _template: 'table', _replyto: email
+      };
+      fetch('https://formsubmit.co/ajax/amit@houseoflions.in', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return r.ok && String(j.success) === 'true'; }); })
+        .catch(function () { return false; })
+        .then(function (ok) {
+          btn.disabled = false; btn.innerHTML = label;
+          if (!ok) {
+            err.hidden = false;
+            err.textContent = 'Your message could not be sent. Please email amit@houseoflions.in or call +91 99994 92649.';
+            return;
+          }
+          form.hidden = true;
+          var done = document.querySelector('.form-done');
+          done.querySelector('[data-first]').textContent = name.split(' ')[0];
+          done.hidden = false;
+          done.setAttribute('tabindex', '-1'); done.focus();
+        });
     });
   }
 })();

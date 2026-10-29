@@ -7,7 +7,7 @@
 import json, math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "15"  # bump to bust browser caches after CSS/JS changes
+V = "16"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -678,7 +678,6 @@ def work():
 # ---------- INSIGHTS ----------
 def insights():
     cards = "".join(blog_card(b) for b in BLOGS)
-    arch = "".join(f'<a href="{u}" target="_blank" rel="noopener"><span class="meta"><span>{d}</span><span>2 min read</span></span><h3>{h}</h3><p>{x}</p><span class="link-arrow" style="justify-self:start">Read on houseoflions.in <span class="arr" aria-hidden="true">&#8599;</span></span></a>' for h, x, d, u in POSTS)
     body = f'''
 <section class="page-hero">
   <div class="wrap grid">
@@ -689,12 +688,6 @@ def insights():
 <section class="section" style="padding-top:0">
   <div class="wrap">
     <div class="posts">{cards}</div>
-  </div>
-</section>
-<section class="section band band-paper" aria-labelledby="arch-title">
-  <div class="wrap">
-    <div class="sec-head"><h2 id="arch-title" class="d-l">From the <em>archive.</em></h2></div>
-    <div class="ins">{arch}</div>
   </div>
 </section>
 {closing()}
@@ -756,6 +749,7 @@ def contact():
           </div>
           <div class="field"><label for="f-company">Company / Organization</label><input id="f-company" name="company" autocomplete="organization"></div>
           <div class="field"><label for="f-msg">Message *</label><textarea id="f-msg" name="message" rows="4"></textarea></div>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
           <p class="form-error" role="alert" hidden></p>
           <div class="actions"><button class="btn btn-primary" type="submit">Submit <span class="arr" aria-hidden="true">&#8599;</span></button></div>
         </div>
