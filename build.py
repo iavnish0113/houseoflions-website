@@ -7,7 +7,7 @@
 import json, math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "14"  # bump to bust browser caches after CSS/JS changes
+V = "15"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -804,9 +804,19 @@ def main():
             os.remove(p)
     for b in BLOGS:
         PAGES["blog-" + b["slug"] + ".html"] = (lambda bb: (lambda: blog_page(bb)))(b)
+    local = {}
+    src_list = os.path.join(ROOT, "assets", "img", "sources.tsv")
+    if os.path.exists(src_list):
+        for line in open(src_list, encoding="utf-8"):
+            if "\t" in line:
+                url, fname = line.rstrip("\n").split("\t")
+                if os.path.exists(os.path.join(ROOT, "assets", "img", fname)):
+                    local[url] = "assets/img/" + fname
     built = {}
     for name, fn in PAGES.items():
         html = fn()
+        for url, path in local.items():
+            html = html.replace(url, path)
         built[name] = html
         with open(os.path.join(ROOT, name), "w") as f:
             f.write(html)
