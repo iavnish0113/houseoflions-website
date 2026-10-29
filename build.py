@@ -7,7 +7,7 @@
 import json, math, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-V = "13"  # bump to bust browser caches after CSS/JS changes
+V = "14"  # bump to bust browser caches after CSS/JS changes
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
@@ -25,7 +25,7 @@ LINKEDIN = "https://www.linkedin.com/company/houseoflions/"
 INSTAGRAM = "https://www.instagram.com/houseoflions_consultancy/"
 FACEBOOK = "https://www.facebook.com/www.houseoflions.net"
 SITE = "https://iavnish0113.github.io/houseoflions-website/"
-PORTFOLIO = "https://www.houseoflions.in/_files/ugd/04e63d_a045211deaec47aa8413aea8f163c6d7.pdf"
+PORTFOLIO = "assets/House-of-Lions-Profile.pdf"
 PROFILE = "https://www.houseoflions.in/_files/ugd/04e63d_12c48e3e2cae4ffea04cd1f5bf3c1c03.pdf"
 
 # ---------- Images (served from the existing Wix media library, cropped/resized on the fly) ----------
@@ -212,7 +212,7 @@ STORIES = [
 # Services: wording from the houseoflions.in homepage ("Breaking through the noise")
 SERVICES = [
     ("Consulting", "Brand and communication consultancy at our core: communication strategy, go-to-market plans, brand strategy, media strategy and image consulting.", "#DCE3F4", None),
-    ("Branding", "Fearless identities that roar, fresh vibes and unstoppable energy. Let’s make your brand the king.", "#EBDCD3", None),
+    ("Branding", "Fearless identities that roar, fresh vibes and unstoppable energy. Let’s make your brand the King.", "#EBDCD3", None),
     ("Personal Branding", "Own your spotlight with our well-crafted narratives that amplify your unique voice. Your brand isn’t just personal, it’s power. Let’s redefine your legacy.", "#E3DBCC", None),
     ("Social Media", "Welcome to The Cub House, our social media agency. Strategy, creativity and swagger: your brand’s pride starts here.", "#F6D9A6", "The Cub House"),
     ("Public Relations", "Elevate your brand with our integrated PR endeavour: bold strategies, unmatched creativity and results-driven campaigns that amplify your story. Turning your vision into a global conversation.", "#E3DBCC", "Mavcomm"),
@@ -227,6 +227,37 @@ QUOTES = [
     ("Their collaborative approach, open communication, and commitment to our success made working with them productive and enjoyable.", "Sameer Malhotra", "CEO, Shriram Automall", "sameer"),
     ("What sets them apart is their heart. They helped me find my voice, and I will always be grateful for that. Thank you for turning my dreams into reality!", "Anita Ajwani", "Founder, Memsaheb", "anita"),
 ]
+
+BLOG_DIR = os.path.join(ROOT, "content", "blogs")
+BLOG_ART = {"branding-vs-positioning": ("#1B2F6B", "#C79A63", "Brand \u2260 position"),
+            "gen-z-lets-empower-them": ("#8C6239", "#EFEAE2", "Gen Z."),
+            "right-is-right-for-the-netherlands-too": ("#E3DBCC", "#1B2F6B", "Right is right?")}
+BLOG_ORDER = ["branding-vs-positioning", "gen-z-lets-empower-them", "right-is-right-for-the-netherlands-too"]
+
+
+def load_blogs():
+    out = []
+    for slug in BLOG_ORDER:
+        raw = open(os.path.join(BLOG_DIR, slug + ".txt"), encoding="utf-8").read().strip().split("\n\n")
+        title, paras = raw[0].strip(), [x.strip() for x in raw[1:] if x.strip()]
+        words = sum(len(x.split()) for x in paras)
+        out.append(dict(slug=slug, title=title, paras=paras, mins=max(1, round(words / 200)),
+                        dek=(paras[0][:150].rsplit(" ", 1)[0] + "\u2026") if len(paras[0]) > 150 else paras[0]))
+    return out
+
+
+BLOGS = load_blogs()
+
+
+def blog_card(b):
+    bg, fg, word = BLOG_ART[b["slug"]]
+    return f'''<a class="post" href="blog-{b["slug"]}.html">
+  <div class="post-art" style="background:{bg};color:{fg}"><span>{word}</span></div>
+  <p class="post-meta"><span>Insights</span><span>{b["mins"]} min read</span></p>
+  <h3>{b["title"]}</h3>
+  <p>{b["dek"]}</p>
+</a>'''
+
 
 # Non-political posts from houseoflions.in/insights
 POSTS = [
@@ -263,12 +294,12 @@ W = "assets/work/"
 PROFILES = [
     dict(key="gulshan", name="Gulshan Group", sector="Real estate", tag="Delhi-NCR\u2019s most iconic luxury real estate project",
          did=["Image-building podcast", "Pre-launch teaser films", "Pre-launch social media", "Pre-launch EDM", "Print ads", "Topical and event creatives"],
-         intro="For thG by Gulshan, we built a pre-launch world of five-star living: cinematic teasers, a leadership podcast, luxury social media and national print.",
+         intro="For The G by Gulshan, we built a pre-launch world of five-star living: cinematic teasers, a leadership podcast, luxury social media and national print.",
          hero="gulshan-hero", pair=["gulshan-2", "gulshan-4"],
          gallery=["gulshan-8", "gulshan-1", "gulshan-2", "gulshan-3", "gulshan-4", "gulshan-5", "gulshan-6", "gulshan-9", "gulshan-7", "gulshan-hero"]),
     dict(key="wal", name="WAL Developments", sector="Real estate", tag="A living inspired by wellness, greenery and serenity",
-         did=["Teaser campaign", "OOH and DOOH", "Print", "Social media and channel partner EDM", "Collaterals", "Launch event"],
-         intro="For Serenia Wellness Residences, we took WAL Developments from teaser to launch: a serene visual world across OOH and DOOH, national print, collaterals, social media and a launch event.",
+         did=["Teaser campaign", "OOH", "Print", "Social media and channel partner communication", "Collaterals", "Launch event"],
+         intro="For Serenia Wellness Residences, we took WAL Developments from teaser to launch: a serene visual world across OOH, national print, collaterals, social media and a launch event.",
          hero="wal-hero", pair=["wal-1", "wal-2"],
          gallery=["wal-hero", "wal-1", "wal-3", "wal-4", "wal-2", "wal-5", "wal-6", "wal-7", "wal-8", "wal-11", "wal-9", "wal-10", "wal-12", "wal-13", "wal-14", "wal-15", "wal-16", "wal-17"]),
     dict(key="vibes", name="Vibes", sector="Beauty and wellness", tag="Young forever",
@@ -342,7 +373,7 @@ def services_list(link=True):
     previews = ["amit-stage", "gulshan-9", "whiteland-1", "vibes-2", "gulshan-8", "proquest-4"]
     for i, (name, text, tint, unit) in enumerate(SERVICES):
         pv = W + previews[i] + ".jpg"
-        note = f'<span class="cap-note">Delivered by {unit}</span>' if unit else ""
+        note = f'<span class="cap-note">Delivered by {unit}</span>' if unit == "The Cub House" else ""
         out += f'''<li class="cap-row"><a href="{"solutions.html#services" if link else "contact.html"}" style="--tint:{tint}" data-preview="{pv}">
   <span class="cap-num">{i + 1:02d}</span>
   <span class="cap-title">{name}</span>
@@ -371,7 +402,7 @@ def home():
     LOGOS = "".join(f'<span class="client">{logo(k, n, "client-logo")}</span>' for k, n in STRIP)
     feats = "".join(feature(p, i % 2 == 1) for i, p in enumerate(PROFILES))
     why = "".join(f'<li><span class="n">{i + 1:02d}</span><b>{w}</b></li>' for i, w in enumerate(WHY))
-    ins = "".join(f'<a href="{u}" target="_blank" rel="noopener"><span class="meta"><span>{d}</span><span>2 min read</span></span><h3>{h}</h3><p>{x}</p></a>' for h, x, d, u in POSTS)
+    ins = "".join(blog_card(b) for b in BLOGS)
 
     body = f'''
 <section class="hero">
@@ -380,7 +411,6 @@ def home():
       <p class="eyebrow rise">House of Lions &nbsp;/&nbsp; Brand and communication consultancy</p>
       <h1 class="rise d1">India’s finest brand <em>storytellers.</em></h1>
       <p class="hero-line rise d2">Real estate to café, EV to wellness, India to the world.</p>
-      <p class="hero-small rise d2">We are best-selling storytellers.</p>
       <div class="actions rise d3">
         <a class="btn btn-primary" href="tel:{CONSULT_TEL}">Call for free consultation <span class="arr" aria-hidden="true">&#8599;</span></a>
         <a class="link-arrow" href="{PORTFOLIO}" target="_blank" rel="noopener">Download portfolio <span class="arr" aria-hidden="true">&#8599;</span></a>
@@ -396,19 +426,15 @@ def home():
   </div>
 </section>
 
-<div class="ticker" aria-label="Stories told with a roar. Real estate to café, EV to wellness, India to the world. Scripting success.">
-  <div class="ticker-track" aria-hidden="true">{t}{t}</div>
-</div>
 
 <section class="section roar" aria-labelledby="roar-title">
   <div class="wrap grid statement">
     <div class="st-text">
       <h2 id="roar-title" class="d-xl">Stories told with a <em>roar.</em></h2>
-      <p class="big">Discover the art and science of crafting compelling narrative that sets the brand temperature soaring high, with better traction, engagement and ROI.</p>
-      <div class="sub-statement"><h3>Communicate. Engage. Convert.</h3><p class="muted">As India’s leading integrated communication agency, we devise intricate and effective narrative that accentuates your brand growth and presence.</p></div>
+      <p class="big">As India’s leading integrated communications agency, we craft compelling, effective narratives that strengthen your brand’s reach, growth and presence.</p>
     </div>
     <div class="st-media roar-collage">
-      <div class="ph r-main">{img("lion-boss", "A lion in a leather armchair, House of Lions brand artwork")}</div>
+      {photo("plants", 900, 1125, "The House of Lions studio in Gurugram", "ph r-main")}
       {photo("lounge", 600, 750, "The House of Lions studio lounge", "ph r-a")}
       {photo("tiger", 600, 750, "Tiger mural in the House of Lions studio", "ph r-b")}
     </div>
@@ -429,7 +455,7 @@ def home():
   <div class="wrap">
     <div class="sec-head">
       <h2 id="work-title" class="d-xl">Success <em>saga.</em></h2>
-      <div class="intro" style="display:grid;gap:18px;justify-items:start"><p>We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p><a class="link-arrow" href="work.html">All work <span class="arr" aria-hidden="true">&#8599;</span></a></div>
+      <div class="intro" style="display:grid;gap:18px;justify-items:start"><a class="link-arrow" href="work.html">All work <span class="arr" aria-hidden="true">&#8599;</span></a></div>
     </div>
     <div class="feat-list">{feats}</div>
   </div>
@@ -438,7 +464,7 @@ def home():
 <section class="band band-ink section film" aria-labelledby="film-title">
   <div class="wrap">
     <div class="sec-head">
-      <div style="grid-column:1/span 8;display:grid;gap:20px"><p class="eyebrow">The HOL film</p><h2 id="film-title" class="d-xl">This is the <em>House of Lions.</em></h2></div>
+      <div style="grid-column:1/span 8;display:grid;gap:20px"><p class="eyebrow">The HOL film</p><h2 id="film-title" class="d-xl">The <em>Roar.</em></h2></div>
     </div>
     <div class="film-frame">
       <video id="film" src="assets/video/hol-movie.mp4" poster="assets/video/hol-movie-poster.jpg" preload="none" playsinline controls aria-label="The House of Lions brand film"></video>
@@ -485,7 +511,7 @@ def home():
       <h2 id="ins-title" class="d-xl">Insights</h2>
       <div class="intro" style="display:grid;gap:18px;justify-items:start"><p>Short. Precise. Effective.</p><a class="link-arrow" href="insights.html">All insights <span class="arr" aria-hidden="true">&#8599;</span></a></div>
     </div>
-    <div class="ins">{ins}</div>
+    <div class="posts">{ins}</div>
   </div>
 </section>
 
@@ -602,7 +628,7 @@ def solutions():
 
 <section class="section" aria-labelledby="cs-title">
   <div class="wrap">
-    <div class="sec-head"><h2 id="cs-title" class="d-xl">Success <em>saga.</em></h2><div class="intro" style="display:grid;gap:18px;justify-items:start"><p>We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p><a class="link-arrow" href="work.html">All work <span class="arr" aria-hidden="true">&#8599;</span></a></div></div>
+    <div class="sec-head"><h2 id="cs-title" class="d-xl">Success <em>saga.</em></h2><div class="intro" style="display:grid;gap:18px;justify-items:start"><a class="link-arrow" href="work.html">All work <span class="arr" aria-hidden="true">&#8599;</span></a></div></div>
     <div class="feat-list">{"".join(feature(p, i % 2 == 1) for i, p in enumerate(PROFILES))}</div>
   </div>
 </section>
@@ -634,7 +660,7 @@ def work():
   <div class="wrap grid">
     <p class="eyebrow rise">Work</p>
     <h1 class="rise d1">Success <em>saga.</em></h1>
-    <div class="ph-copy rise d2"><p>We aim to overwhelm them with our IQ and EQ, going the extra mile every time and delivering every single time.</p><div class="actions" style="gap:12px 24px;margin-top:12px">{nav}</div></div>
+    <div class="ph-copy rise d2"><div class="actions" style="gap:12px 24px;margin-top:12px">{nav}</div></div>
   </div>
 </section>
 <div class="wrap">{out}</div>
@@ -651,7 +677,8 @@ def work():
 
 # ---------- INSIGHTS ----------
 def insights():
-    ins = "".join(f'<a href="{u}" target="_blank" rel="noopener"><span class="meta"><span>{d}</span><span>2 min read</span></span><h3>{h}</h3><p>{x}</p><span class="link-arrow" style="justify-self:start">Read on houseoflions.in <span class="arr" aria-hidden="true">&#8599;</span></span></a>' for h, x, d, u in POSTS)
+    cards = "".join(blog_card(b) for b in BLOGS)
+    arch = "".join(f'<a href="{u}" target="_blank" rel="noopener"><span class="meta"><span>{d}</span><span>2 min read</span></span><h3>{h}</h3><p>{x}</p><span class="link-arrow" style="justify-self:start">Read on houseoflions.in <span class="arr" aria-hidden="true">&#8599;</span></span></a>' for h, x, d, u in POSTS)
     body = f'''
 <section class="page-hero">
   <div class="wrap grid">
@@ -661,12 +688,47 @@ def insights():
 </section>
 <section class="section" style="padding-top:0">
   <div class="wrap">
-    <div class="ins">{ins}</div>
+    <div class="posts">{cards}</div>
+  </div>
+</section>
+<section class="section band band-paper" aria-labelledby="arch-title">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="arch-title" class="d-l">From the <em>archive.</em></h2></div>
+    <div class="ins">{arch}</div>
   </div>
 </section>
 {closing()}
 '''
     return page("insights", "Insights, House of Lions", "Short. Precise. Effective. Insights from House of Lions.", body, "insights")
+
+
+def blog_page(b):
+    bg, fg, word = BLOG_ART[b["slug"]]
+    paras = "".join(f"<p>{x}</p>" for x in b["paras"])
+    others = "".join(blog_card(o) for o in BLOGS if o["slug"] != b["slug"])
+    body = f'''
+<article class="article">
+  <header class="page-hero">
+    <div class="wrap grid">
+      <p class="eyebrow rise"><a href="insights.html" style="text-decoration:none">Insights</a> &nbsp;/&nbsp; {b["mins"]} min read</p>
+      <h1 class="rise d1">{b["title"]}</h1>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="article-art" style="background:{bg};color:{fg}"><span>{word}</span></div>
+    <div class="article-body">{paras}</div>
+  </div>
+</article>
+<section class="section band band-paper" aria-labelledby="more-ins">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="more-ins" class="d-l">More <em>insights.</em></h2><div class="intro"><a class="link-arrow" href="insights.html">All insights <span class="arr" aria-hidden="true">&#8599;</span></a></div></div>
+    <div class="posts two-up">{others}</div>
+  </div>
+</section>
+{closing()}
+'''
+    desc = b["paras"][0][:155]
+    return page("blog-" + b["slug"], b["title"] + ", House of Lions", desc, body, "insights")
 
 
 # ---------- CONTACT ----------
@@ -708,7 +770,7 @@ def contact():
       <div class="side-block"><h3>Phone</h3><p><a href="tel:{PHONE_TEL}">{PHONE}</a></p></div>
       <div class="side-block"><h3>Free consultation</h3><p><a href="tel:{CONSULT_TEL}">{CONSULT}</a></p></div>
       <div class="side-block"><h3>Address</h3><address>1st Floor, VI John Tower<br>393, Udyog Vihar Phase 3 Road<br>Phase II, Udyog Vihar, Sector 20<br>Gurugram, Haryana 122016</address></div>
-      <div class="side-block"><h3>Downloads</h3><p><a href="{PORTFOLIO}" target="_blank" rel="noopener">Portfolio (PDF)</a> &nbsp; <a href="{PROFILE}" target="_blank" rel="noopener">Profile (PDF)</a></p></div>
+      <div class="side-block"><h3>Downloads</h3><p><a href="{PORTFOLIO}" target="_blank" rel="noopener">Portfolio (PDF)</a></p></div>
     </aside>
   </div>
 </section>
@@ -726,7 +788,7 @@ LDJSON = ('<script type="application/ld+json">' + json.dumps({
     "areaServed": ["Delhi", "Gurugram", "Mumbai", "Paris"],
     "sameAs": [LINKEDIN, INSTAGRAM, FACEBOOK]}) + '</script>')
 
-FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1D3B96"/>'
+FAVICON = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1B2F6B"/>'
            '<text x="32" y="42" font-family="Georgia,serif" font-size="24" text-anchor="middle" fill="#F0ECE4">HOL</text></svg>')
 
 PAGES = {"index.html": home, "about.html": about, "solutions.html": solutions, "work.html": work,
@@ -740,6 +802,8 @@ def main():
         p = os.path.join(ROOT, old)
         if os.path.exists(p):
             os.remove(p)
+    for b in BLOGS:
+        PAGES["blog-" + b["slug"] + ".html"] = (lambda bb: (lambda: blog_page(bb)))(b)
     built = {}
     for name, fn in PAGES.items():
         html = fn()
