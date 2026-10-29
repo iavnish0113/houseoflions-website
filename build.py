@@ -24,7 +24,7 @@ CONSULT_TEL = "+919999492649"
 LINKEDIN = "https://www.linkedin.com/company/houseoflions/"
 INSTAGRAM = "https://www.instagram.com/houseoflions_consultancy/"
 FACEBOOK = "https://www.facebook.com/www.houseoflions.net"
-SITE = "https://iavnish0113.github.io/houseoflions-website/"
+SITE = "https://houseoflions.in/"
 PORTFOLIO = "assets/House-of-Lions-Profile.pdf"
 PROFILE = "https://www.houseoflions.in/_files/ugd/04e63d_12c48e3e2cae4ffea04cd1f5bf3c1c03.pdf"
 
